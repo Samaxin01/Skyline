@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Skyline Dashboard</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <div class="container">
+    <div class="heading">
+        <h2>Skyline</h2>
+        <div class="sml-img">
+            <img src="img/add_box_24dp_000000_FILL0_wght400_GRAD0_opsz24.png" alt="">
+            <img src="img/bell.png" alt="bell">
+        </div>
+    </div>
+    <div class="gmail-greet">
+        <p><strong>Hi,</strong></p>
+        <p id="userEmail">Loading...</p>
+    </div>
+    <div class="heading-img">
+        <img src="img/Whatsapp task 4 me group.jpg" alt="">
+    </div>
+
+    <div class="heading-icon">
+        <div class="num1">
+            <img src="img/mail.png" alt="Mail">
+            <h5>Mail</h5>
+        </div>
+        <div class="num1">
+            <img src="img/contact support.png" alt="Service">
+            <h5>Service</h5>
+        </div>
+        <div class="num1">
+            <img src="img/referral.png" alt="Refer">
+            <h5>Refer</h5>
+        </div>
+        <div class="num1">
+            <img src="img/DAILY reward.png" alt="Reward">
+            <h5>Reward</h5>
+        </div>
+        
+    </div>
+
+    <div class="invite-icon">
+        <img src="img/invite-icon.png" alt="">
+        <div class="invite-txt">
+            <h4>Invite friends</h4>
+            <p>Get reward when you invite your friends</p>
+            <h5>Invite</h5>
+        </div>
+    </div>
+
+    <nav>
+    <a href="dashboard.html">🏠<br/>Home</a>
+    <a href="tasks.html">✅<br/>Tasks</a>
+    <a href="upload-task.html">➕<br/>Upload Task</a>
+    <a href="withdraw.html">💵<br/>Withdraw</a>
+    <a href="profile.html">👤<br/>Profile</a>
+  </nav>
+
+
+  <script type="module">
+    // Firebase SDK
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDim9k5CHfNythq6ORypN_RfwyLNMuxVLs",
+      authDomain: "sign-2fd98.firebaseapp.com",
+      projectId: "sign-2fd98",
+      storageBucket: "sign-2fd98.appspot.com",
+      messagingSenderId: "548682903618",
+      appId: "1:548682903618:web:0f0ca286f902c7fbacfddb"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const emailEl = document.getElementById("userEmail");
+    const balanceEl = document.getElementById("userBalance");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    // Check user authentication
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        emailEl.textContent = user.email;
+
+        const userDocRef = doc(db, "users", user.uid);
+
+        // Real-time listener for balance updates
+        onSnapshot(userDocRef, (docSnap) => {
+          if (docSnap.exists()) {
+            const data = docSnap.data();
+            const balance = data.balance ?? 0;
+            balanceEl.textContent = "₦" + balance.toLocaleString();
+          } else {
+            balanceEl.textContent = "₦0";
+          }
+        });
+      } else {
+        window.location.href = "login.html";
+      }
+    });
+
+    // Logout
+    logoutBtn.addEventListener("click", () => {
+      signOut(auth).then(() => {
+        window.location.href = "login.html";
+      });
+    });
+  </script>
+</body>
+</html>

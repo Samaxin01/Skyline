@@ -1,0 +1,138 @@
+ :root {
+      --primary: #08a88a;
+      --secondary: #121331;
+      --bg: #ffffff;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background: var(--bg);
+      padding: 0px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 400px;
+     
+    }
+
+    h2 {
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+
+    p {
+      margin: 10px 0;
+      color: var(--secondary);
+      font-size: 16px;
+    }
+
+    .balance {
+      font-size: 32px;
+      font-weight: bold;
+      color: var(--primary);
+      margin-top: 20px;
+    }
+
+    button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 30px;
+    }
+
+    button:hover {
+      background: #06b398;
+    }
+    .heading{
+        display: flex;
+    }
+    .sml-img {
+        margin-left: 13em;
+    position: relative;
+    top: 1.4em;
+    opacity: 70%;
+    }
+    .gmail-greet{
+        display: flex;
+    }
+      nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #08a88a;
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0;
+      border-top: 1px solid #ccc;
+    }
+
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      text-align: center;
+      font-size: 14px;
+    }
+    .heading-img img{
+        width: 100%;
+    border-radius: 0.5em;
+    }
+    .invite-icon{
+        display: flex;
+    }
+    .invite-icon img{
+        height: 7vh;
+    position: relative;
+    top: 1em;
+    }
+    .invite-icon h4{
+        margin-bottom: 0;
+    color: var(--secondary);
+    }
+    .invite-txt p{
+        color: gray;
+    margin-top: 0.3em;
+    }
+    .invite-txt h5{
+        text-align: center;
+    background: var(--primary);
+    color: white;
+    padding: 0.4em;
+    margin-top: 0;
+    border-radius: 10.7em;
+    cursor: pointer;
+    }
+    .invite-txt h5:hover{
+        background: var(--secondary);
+    }
+    .heading-icon{
+        display: flex;
+    margin: 0.5em 0;
+    justify-content: center;
+    justify-self: center;
+    }
+    .num1{
+        margin: 0 1.7em;
+    }
+    .num1 h5{
+        margin: 0;
+    }
+    .num1 img{
+        justify-self: center;
+    justify-content: center;
+    display: flex;
+    }
+    .num1 h5{
+        color: var(--secondary);
+    }

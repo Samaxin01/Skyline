@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Skyline - Sign Up</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    background: #fffaf2;
+    margin: 0;
+    padding: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    }
+
+    h1 {
+      color: #08a88a;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    form {
+      max-width: 400px;
+    margin: auto;
+    padding: 20px;
+    border-radius: 8px;
+    background: white;
+    }
+
+    form input, form button {
+      width: 93%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    }
+
+    form button {
+      background: #08a88a;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    form button:hover {
+      background: #121331;
+    }
+
+    .login-link {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    #message {
+      text-align: center;
+      color: #08a88a;
+      font-weight: bold;
+      margin-top: 15px;
+    }
+    @media (max-width: 506px){
+        .container{
+            background: white;
+            padding: 4px;
+            border-radius: 12px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: none;
+        }
+        form button{
+            font-size: 0.8em;
+        }
+
+        h1{
+            font-size: 1.2em;
+            margin-bottom: 0.5em;
+        }
+        button{
+            font-size: 0.9em;
+        }
+        label{
+            color: var(--secondary);
+            font-size: 0.9em;
+            
+        }
+    }
+     .cloud img{
+        width: 10%;
+    display: flex;
+    justify-self: center;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+    <div class="cloud">
+        <img src="gif/wired-outline-261-emoji-smile-hover-smile.gif" alt="smile">
+    </div>
+  <h1>Create Your Account</h1>
+  <form id="signupForm">
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <input type="password" id="confirm" placeholder="Confirm Password" required>
+    <button type="submit">Sign Up</button>
+  </form>
+  <div class="login-link">
+    Already have an account? <a href="login.html">Login</a>
+  </div>
+  <div id="message"></div>
+</div>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, doc, setDoc, collection, query, where, getDocs, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyDim9k5CHfNythq6ORypN_RfwyLNMuxVLs",
+      authDomain: "sign-2fd98.firebaseapp.com",
+      projectId: "sign-2fd98",
+      storageBucket: "sign-2fd98.appspot.com",
+      messagingSenderId: "548682903618",
+      appId: "1:548682903618:web:0f0ca286f902c7fbacfddb"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const form = document.getElementById("signupForm");
+    const messageDiv = document.getElementById("message");
+
+    function generateReferralCode(length = 8) {
+      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+      let code = "";
+      for (let i = 0; i < length; i++) {
+        code += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return code;
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const promoCode = urlParams.get("promo_code") || "";
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const confirm = document.getElementById("confirm").value.trim();
+
+      if (password !== confirm) {
+        alert("Passwords do not match!");
+        return;
+      }
+
+      try {
+        // Create user
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+
+        // Generate referral code
+        const referralCode = generateReferralCode();
+
+        // Save user profile
+        await setDoc(doc(db, "users", userCredential.user.uid), {
+          email: email,
+          balance: 0,
+          referralCode: referralCode,
+          referredBy: promoCode,
+          totalTasksClicked: 0,
+          createdAt: Date.now()
+        });
+
+        // Send verification email
+        await sendEmailVerification(userCredential.user);
+
+        // Reward referrer if promo code used
+        if (promoCode) {
+          const q = query(collection(db, "users"), where("referralCode", "==", promoCode));
+          const querySnapshot = await getDocs(q);
+
+          if (!querySnapshot.empty) {
+            const referrerDoc = querySnapshot.docs[0];
+            const referrerRef = referrerDoc.ref;
+
+            await updateDoc(referrerRef, {
+              balance: increment(100)
+            });
+          }
+        }
+
+        // Show message instead of redirect
+        messageDiv.textContent = "✅Account created! A verification email has been sent. Please verify your email before logging in.";
+        form.reset();
+
+      } catch (error) {
+        console.error(error);
+        alert("Error: " + error.message);
+      }
+    });
+  </script>
+</body>
+</html>

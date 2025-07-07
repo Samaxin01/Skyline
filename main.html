@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Skyline Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: #f5f6fa;
+      color: #222;
+    }
+    .topbar {
+      background: white;
+      padding: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .topbar img {
+      height: 30px;
+    }
+    .profile-icon {
+      width: 35px;
+      height: 35px;
+      border: 2px solid #ddd;
+      border-radius: 50%;
+    }
+    .container {
+      padding: 20px;
+    }
+    .profile-card {
+      display: flex;
+      flex-direction: column;
+      background: #111;
+      color: white;
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 20px;
+      margin-top: 4.2em;
+    }
+    .stats-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+    .stat-card {
+      flex: 1;
+      min-width: 140px;
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      text-align: center;
+    }
+    .green-box {
+      background: #08a88a;
+      padding: 20px;
+      color: white;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+    .referral-input {
+      display: flex;
+      margin: 10px 0;
+      gap: 10px;
+    }
+    .referral-input input {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 10px;
+    }
+    .referral-input button {
+      background: white;
+      color: black;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: white;
+      border-top: 1px solid #ddd;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+    }
+    .bottom-nav div {
+      text-align: center;
+      font-size: 12px;
+      color: #555;
+    }
+    .section {
+      margin-bottom: 30px;
+    }
+    .section h3 {
+      margin-bottom: 10px;
+    }
+    .leaderboard, .recent-earnings {
+      background: white;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .leaderboard-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .checklist {
+      background: orangered;
+      color: white;
+      padding: 20px;
+      border-radius: 20px;
+    }
+    .checklist-item {
+      margin-bottom: 10px;
+    }
+    .topbar h5{
+        font-size: 1.5em;
+    color: #08a88a;
+    }
+    .topbar{
+        position: fixed;
+    width: 100%;
+    z-index: 999;
+    }
+    .task1{
+        text-align: center;
+    background: green;
+    color: white;
+    border-radius: 1em;
+    width: 17em;
+    display: grid;
+    justify-content: center;
+    justify-items: center;
+    justify-self: center;
+    padding: 1em;
+    margin: 3em 1.6em;
+    }
+    .task1 img{
+        position: relative;
+    bottom: 4em;
+    }
+    .task1 h5{
+        font-size: 1.8em;
+    }
+    .task1 h6{
+        background: cyan;
+    color: black;
+    padding: 1em;
+    border-radius: 1em;
+    width: 50%;
+    }
+    .vid-img-task{
+        display: flex;
+    justify-content: center;
+    justify-items: center;
+    }
+    .wa-cha{
+        display: flex;
+    background: #08a88a;
+    color: white;
+    padding: 2em;
+    margin: 1em 1em 7em;
+    border-radius: 1.7em;
+    }
+    .daily-cha{
+        margin-left: 40em;
+    }
+    .daily-cha h5{
+        background: white;
+    color: black;
+    text-align: center;
+    padding: 0.5em;
+    border-radius: 0.8em;
+    cursor: pointer;
+    }
+    @media (max-width:700px) {
+        .vid-img-task{
+            display: grid;
+        margin: 3em;
+        }
+        .task1{
+            height: 39vh;
+        }
+        .task1 img{
+            width: 12em;
+        }
+        .daily-cha {
+    margin-left: 7em;
+    }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top bar -->
+  <div class="topbar">
+    <img src="gif/wired-outline-2565-logo-slack-hover-pinch.gif" alt="Skyline" />
+    <h5>Skyline</h5>
+    <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" class="profile-icon" />
+  </div>
+
+  <!-- Main Content -->
+  <div class="container">
+
+    <!-- Profile Card -->
+    <div class="profile-card">
+      <h2 id="username">Loading...</h2>
+      <p id="referredBy">Referred by: ...</p>
+      <div class="card">
+  <h3>LEVEL 1 ➡ LEVEL 2 Progress</h3>
+  <ul id="progressList" style="list-style:none; padding:0;">
+    <li id="clicksCheck">❌ At least 4 clicks</li>
+    <li id="referralsCheck">❌ At least 2 referrals</li>
+    <li id="videosCheck">❌ At least 5 videos watched</li>
+    <li id="tasksCheck">❌ At least 2 tasks completed</li>
+  </ul>
+  <div id="levelBonus" style="margin-top:10px; font-weight:bold;"></div>
+</div>
+
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card" id="earningsCard"><b>EARNINGS</b><br>₦0</div>
+      <div class="stat-card" id="clicksCard">CLICKS<br>0</div>
+      <div class="stat-card" id="referralsCard">REFERRALS<br>0</div>
+      <div class="stat-card" id="videosCard">VIDEOS<br>0</div>
+      <div class="stat-card" id="tasksCard">TASKS<br>0</div>
+    </div>
+
+    <!-- Invite & Earn -->
+    <div class="green-box">
+      <h3>Invite & Earn!</h3>
+      <div class="referral-input">
+        <input type="text" id="refLink" value="" readonly>
+        <button onclick="copyLink()">COPY</button>
+      </div>
+      <p>Share your referral link with friends</p>
+      <p>₦300 for 6 completed task | ₦100 per invite | 15% Commission after withdrawal</p>
+    </div>
+
+    <!-- Recent Earnings -->
+    <div class="section recent-earnings">
+      <h3>Recent Earnings</h3>
+      <p>Sign-up bonus <b style="float:right;" id="recentEarnings">₦0</b></p>
+    </div>
+
+    <!-- Leaderboard -->
+    <div class="section leaderboard" id="leaderboard">
+      <h3>Leaderboard</h3>
+      <p>Loading...</p>
+    </div>
+
+    <div class="vid-img-task">
+        <div class="task1">
+            <img src="img/comming-soon-task.png" alt="Tasks">
+            <h5>Tasks</h5>
+            <h6>Perform</h6>
+        </div>
+
+         <div class="task1" style="background: #e86f26;">
+            <img src="img/comming-soon-video.png" alt="Tasks">
+            <h5>Videos</h5>
+            <h6>Perform</h6>
+        </div>
+
+         <div class="task1" style="background: #577442;">
+            <img src="img/comming-soon-referral.png" alt="Tasks">
+            <h5>Referrals</h5>
+            <h6>Perform</h6>
+        </div>
+    </div>
+
+    <div class="card">
+  <h3>Tasks Completed</h3>
+  <div id="tasksCompleted">Loading...</div>
+</div>
+
+
+    <!-- Checklist -->
+    <div class="checklist">
+      <h3>Checklist</h3>
+      <div class="checklist-item">☐ COPY AND BEGIN SHARING</div>
+      <div class="checklist-item">☐ GET YOUR 1ST CLICK!</div>
+      <div class="checklist-item">☐ GET YOUR 1ST REFERRAL!</div>
+      <div class="checklist-item">☐ WATCH YOUR 1ST VIDEO</div>
+    </div>
+  </div>
+
+  <div class="wa-cha">
+    <div class="price">
+    <h2><strong>₦1,000</strong></h2>
+    <p>Whatsapp</p>
+    </div>
+    <div class="daily-cha">
+        <p>Daily Challenge</p>
+        <h5>View Challenge</h5>
+    </div>
+  </div>
+
+  <!-- Bottom Nav -->
+  <div class="bottom-nav">
+  <div><a href="main.html" style="text-decoration:none;color:inherit;">🏠<br>Home</a></div>
+  <div><a href="videos.html" style="text-decoration:none;color:inherit;">📺<br>Videos</a></div>
+  <div><a href="refer.html" style="text-decoration:none;color:inherit;">🎁<br>Refer</a></div>
+  <div><a href="tasks.html" style="text-decoration:none;color:inherit;">📝<br>Tasks</a></div>
+  <div><a href="withdraw.html" style="text-decoration:none;color:inherit;">💳<br>Withdraw</a></div>
+</div>
+
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
+  <!-- Firebase Config -->
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDim9k5CHfNythq6ORypN_RfwyLNMuxVLs",
+      authDomain: "sign-2fd98.firebaseapp.com",
+      projectId: "sign-2fd98",
+      storageBucket: "sign-2fd98.appspot.com",
+      messagingSenderId: "548682903618",
+      appId: "1:548682903618:web:0f0ca286f902c7fbacfddb"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // Copy Referral Link
+    function copyLink() {
+      const input = document.getElementById("refLink");
+      input.select();
+      document.execCommand("copy");
+      alert("Referral link copied!");
+    }
+
+    // Load User Data
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        const uid = user.uid;
+        db.collection("users").doc(uid).get().then(doc => {
+          if (doc.exists) {
+            const data = doc.data();
+            document.getElementById("username").innerText = data.displayName || "User";
+            document.getElementById("referredBy").innerText = "Referred by: " + (data.referredBy || "N/A");
+            document.getElementById("earningsCard").innerHTML = "<b>EARNINGS</b><br>₦" + data.balance.toLocaleString();
+            document.getElementById("recentEarnings").innerText = "₦" + data.balance.toLocaleString();
+            document.getElementById("clicksCard").innerHTML = "CLICKS<br>" + (data.clicks || 0);
+            document.getElementById("referralsCard").innerHTML = "REFERRALS<br>" + (data.referrals || 0);
+            document.getElementById("videosCard").innerHTML = "VIDEOS<br>" + (data.videosWatched || 0);
+            document.getElementById("tasksCard").innerHTML = "TASKS<br>" + (data.tasksCompleted || 0);
+
+            document.getElementById("refLink").value = "https://yourdomain.com/signup.html?ref=" + user.uid;
+          } else {
+            alert("User data not found!");
+          }
+        });
+        // Load Leaderboard
+        db.collection("leaderboard")
+          .orderBy("earnings", "desc")
+          .limit(5)
+          .get()
+          .then(snapshot => {
+            const leaderboard = document.getElementById("leaderboard");
+            leaderboard.innerHTML = "<h3>Leaderboard</h3>";
+            snapshot.forEach(doc => {
+              const d = doc.data();
+              leaderboard.innerHTML += `
+                <div class="leaderboard-item">
+                  <span>${d.name}</span>
+                  <span>₦${d.earnings.toLocaleString()}</span>
+                </div>`;
+            });
+          });
+      } else {
+        window.location.href = "login.html";
+      }
+    });
+    //task
+    auth.onAuthStateChanged(user => {
+  if (user) {
+    db.collection("task_submissions")
+      .where("userId", "==", user.uid)
+      .get()
+      .then(snapshot => {
+        const count = snapshot.size;
+        document.getElementById("tasksCompleted").innerText = count;
+      });
+  }
+});
+//check
+auth.onAuthStateChanged(user => {
+  if (user) {
+    const userRef = db.collection("users").doc(user.uid);
+
+    userRef.get().then(doc => {
+      if (doc.exists) {
+        const data = doc.data();
+        let { clicks=0, referrals=0, videosWatched=0, tasksCompleted=0, level=1, bonusBalance=0 } = data;
+
+        // Flags
+        const clicksOK = clicks >= 4;
+        const referralsOK = referrals >= 2;
+        const videosOK = videosWatched >= 5;
+        const tasksOK = tasksCompleted >= 2;
+
+        // Update UI
+        document.getElementById("clicksCheck").innerText = (clicksOK ? "✅" : "❌") + " At least 4 clicks";
+        document.getElementById("referralsCheck").innerText = (referralsOK ? "✅" : "❌") + " At least 2 referrals";
+        document.getElementById("videosCheck").innerText = (videosOK ? "✅" : "❌") + " At least 5 videos watched";
+        document.getElementById("tasksCheck").innerText = (tasksOK ? "✅" : "❌") + " At least 2 tasks completed";
+
+        // Check if all done
+        if (clicksOK && referralsOK && videosOK && tasksOK) {
+          if (level === 1) {
+            // Upgrade Level & Bonus
+            userRef.update({
+              level: 2,
+              bonusBalance: bonusBalance + 6000
+            }).then(() => {
+              document.getElementById("levelBonus").innerText = "🎉 Congratulations! You are now Level 2 and earned ₦6,000 bonus.";
+            });
+          } else {
+            document.getElementById("levelBonus").innerText = "✅ You are already Level " + level;
+          }
+        } else {
+          document.getElementById("levelBonus").innerText = "Keep going to unlock Level 2 bonus: ₦6,000!";
+        }
+      }
+    });
+  }
+});
+  </script>
+
+</body>
+</html>

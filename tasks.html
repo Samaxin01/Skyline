@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Skyline - Tasks</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #f5f6fa;
+      color: #333;
+      padding: 20px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .task-card {
+      background: white;
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .task-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .task-info {
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+    .countdown {
+      font-size: 14px;
+      color: #e67e22;
+      margin-bottom: 10px;
+    }
+    form {
+      margin-top: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    input, textarea {
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      width: 100%;
+      font-size: 14px;
+    }
+    button {
+      background: #00c851;
+      color: white;
+      border: none;
+      padding: 12px;
+      font-size: 15px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #009344;
+    }
+    .success-message {
+      display: none;
+      color: #27ae60;
+      font-size: 14px;
+    }
+      .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      width: 95%;
+      background: white;
+      border-top: 1px solid #ddd;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+    }
+    .bottom-nav div {
+      text-align: center;
+      font-size: 12px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <h2>Available Tasks</h2>
+
+  <!-- Task Example 1 -->
+  <div class="task-card">
+    <div class="task-title">Watch Promo Video</div>
+    <div class="task-info"><strong>Reward:</strong> ₦500</div>
+    <div class="task-info"><strong>Remaining Clicks Needed:</strong> 25</div>
+    <div class="countdown" data-expire="2025-07-07T23:59:59Z">
+      <strong>Expires In:</strong> <span>Loading...</span>
+    </div>
+    <form
+      action="https://formsubmit.co/jeesammy31@gmail.com"
+      method="POST"
+      enctype="multipart/form-data"
+      onsubmit="recordTaskSubmission(event, 'Watch Promo Video', this)"
+    >
+      <input type="hidden" name="_subject" value="Task Submission: Watch Promo Video">
+      <input type="hidden" name="_captcha" value="false">
+      <textarea name="message" placeholder="Enter description or username" required></textarea>
+      <input type="file" name="proof" accept="image/*,application/pdf" required>
+      <button type="submit">Submit Proof</button>
+      <div class="success-message">✅ Task recorded successfully!</div>
+    </form>
+  </div>
+
+  <!-- Task Example 2 -->
+  <div class="task-card">
+    <div class="task-title">Share on WhatsApp</div>
+    <div class="task-info"><strong>Reward:</strong> ₦300</div>
+    <div class="task-info"><strong>Remaining Clicks Needed:</strong> 50</div>
+    <div class="countdown" data-expire="2025-07-10T12:00:00Z">
+      <strong>Expires In:</strong> <span>Loading...</span>
+    </div>
+    <form
+      action="https://formsubmit.co/jeesammy31@gmail.com"
+      method="POST"
+      enctype="multipart/form-data"
+      onsubmit="recordTaskSubmission(event, 'Share on WhatsApp', this)"
+    >
+      <input type="hidden" name="_subject" value="Task Submission: Share on WhatsApp">
+      <input type="hidden" name="_captcha" value="false">
+      <textarea name="message" placeholder="Enter description or username" required></textarea>
+      <input type="file" name="proof" accept="image/*,application/pdf" required>
+      <button type="submit">Submit Proof</button>
+      <div class="success-message">✅ Task recorded successfully!</div>
+    </form>
+  </div>
+
+  <!-- Bottom Nav -->
+  <div class="bottom-nav">
+  <div><a href="main.html" style="text-decoration:none;color:inherit;">🏠<br>Home</a></div>
+  <div><a href="videos.html" style="text-decoration:none;color:inherit;">📺<br>Videos</a></div>
+  <div><a href="refer.html" style="text-decoration:none;color:inherit;">🎁<br>Refer</a></div>
+  <div><a href="tasks.html" style="text-decoration:none;color:inherit;">📝<br>Tasks</a></div>
+  <div><a href="withdraw.html" style="text-decoration:none;color:inherit;">💳<br>Withdraw</a></div>
+</div>
+
+
+  <!-- Add more tasks by copying a .task-card -->
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <script>
+    // Firebase Config
+    const firebaseConfig = {
+      apiKey: "AIzaSyDim9k5CHfNythq6ORypN_RfwyLNMuxVLs",
+      authDomain: "sign-2fd98.firebaseapp.com",
+      projectId: "sign-2fd98",
+      storageBucket: "sign-2fd98.appspot.com",
+      messagingSenderId: "548682903618",
+      appId: "1:548682903618:web:0f0ca286f902c7fbacfddb"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // Countdown timer
+    function startCountdowns() {
+      const countdowns = document.querySelectorAll(".countdown");
+      countdowns.forEach(el => {
+        const expireAttr = el.getAttribute("data-expire");
+        if (!expireAttr) return;
+        const expireTime = new Date(expireAttr).getTime();
+        const span = el.querySelector("span");
+        function update() {
+          const now = new Date().getTime();
+          const diff = expireTime - now;
+          if (diff <= 0) {
+            span.innerText = "Expired";
+            return;
+          }
+          const h = Math.floor(diff / (1000 * 60 * 60));
+          const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+          const s = Math.floor((diff % (1000 * 60)) / 1000);
+          span.innerText = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+        }
+        update();
+        setInterval(update, 1000);
+      });
+    }
+    startCountdowns();
+
+    // Record task submission
+    function recordTaskSubmission(event, taskName, form) {
+      event.preventDefault(); // prevent form from submitting immediately
+      const user = auth.currentUser;
+      if (!user) {
+        alert("You must be logged in to submit a task.");
+        return;
+      }
+      db.collection("task_submissions").add({
+        userId: user.uid,
+        taskName: taskName,
+        submittedAt: firebase.firestore.FieldValue.serverTimestamp()
+      }).then(() => {
+        // Show success message
+        const msg = form.querySelector(".success-message");
+        if (msg) {
+          msg.style.display = "block";
+        }
+        // After recording, submit the form to FormSubmit
+        form.submit();
+      }).catch(err => {
+        console.error("Error recording task:", err);
+        alert("Failed to record task. Please try again.");
+      });
+    }
+  </script>
+</body>
+</html>
